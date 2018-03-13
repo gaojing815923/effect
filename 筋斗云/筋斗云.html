@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>$</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+
+        ul {
+            list-style: none
+        }
+
+        body {
+            background-color: #333;
+        }
+
+        .nav {
+            width: 800px;
+            height: 42px;
+            margin: 100px auto;
+            background: url(img/rss.png) right center no-repeat;
+            background-color: #fff;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .nav li {
+            width: 83px;
+            height: 42px;
+            text-align: center;
+            line-height: 42px;
+            float: left;
+            cursor: pointer;
+        }
+
+        .nav span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 83px;
+            height: 42px;
+            background: url(img/cloud.gif) no-repeat;
+        }
+
+        ul {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+<div class="nav">
+    <span id="cloud"></span>
+    <ul id="navBar">
+        <li>北京校区</li>
+        <li>上海校区</li>
+        <li>广州校区</li>
+        <li>深圳校区</li>
+        <li>武汉校区</li>
+        <li>关于我们</li>
+        <li>联系我们</li>
+        <li>招贤纳士</li>
+    </ul>
+</div>
+<script src="animate.js"></script>
+<script>
+
+    /**
+     * 要达到的效果：
+     * 1 鼠标移动到某个li上，云彩也跟着移动到这个li上
+     * 2 鼠标离开，云彩回复原位
+     * 3 鼠标点下，让云彩固定在这个li
+     */
+
+    var cloud = $id("cloud");
+    var listItems = $id("navBar").children;
+    //注册鼠标移入、点击、鼠标移出事件
+    for (var i = 0; i < listItems.length; i++) {
+        listItems[i].onmouseover = mouseOverHandle;
+        listItems[i].onclick = clickHandle;
+        listItems[i].onmouseout = mouseOutHandle;
+    }
+    //用来记录云彩上一次的位置
+    var lastPoistion = 0;
+    //鼠标移入事件处理程序
+    function mouseOverHandle() {
+        animatev0(cloud,this.offsetLeft);
+    }
+    //鼠标点击事件处理程序
+    function clickHandle() {
+        lastPoistion = this.offsetLeft;
+    }
+    //鼠标移出事件处理程序
+    function mouseOutHandle() {
+        animatev0(cloud,lastPoistion);
+    }
+
+</script>
+</body>
+</html>
