@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+<img id="img" src="images/tianshi.gif" alt="" style="position:absolute;">
+<script src="eventTool.js"></script>
+<script>
+    /**
+     * 鼠标在页面上移动的时候，获取当前位置的坐标，设置给图片
+     */
+    var img = document.getElementById("img");
+    document.onmousemove = function(e){
+        
+//        console.log(e);
+        //兼容获取事件对象的方式
+        e = e || window.event;
+        //获取位置
+        var x = e.clientX;
+        var y = e.clientY;
+        //设置图片的位置
+        img.style.left = x + "px";
+        img.style.top = y + "px";
+    }
+</script>
+</body>
+
+</html>
