@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>做人要对自己狠一点</title>
+    <style>
+
+        ul {
+            list-style: none;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+
+        div {
+            width: 1150px;
+            height: 400px;
+            margin: 50px auto;
+            border: 1px solid red;
+            overflow: hidden;
+        }
+
+        div li {
+            width: 240px;
+            height: 400px;
+            float: left;
+        }
+
+        div ul {
+            width: 1300px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div id="box">
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+<script src="animate.js"></script>
+<script>
+
+    var list = $id("box").children[0].children;
+    for (var i = 0; i < list.length; i++) {
+        //动态的给每张图片设置背景图片
+        list[i].style.backgroundImage = "url('images/"+(i+1)+".jpg')";
+        //注册事件
+        list[i].onmouseover = mouseOverHandle;
+        list[i].onmouseout = mouseOutHandle;
+    }
+    //鼠标移入
+    function mouseOverHandle() {
+        //把其他的盒子变成100宽
+        for (var j = 0; j < list.length; j++) {
+            animatev5(list[j],{"width":100});
+        }
+        //把自己变成800宽
+        animatev5(this,{"width":800});
+    }
+//    鼠标移出
+    function mouseOutHandle() {
+        //所有的盒子都变成240宽
+        for (var j = 0; j < list.length; j++) {
+            animatev5(list[j],{"width":240});
+        }
+    }
+</script>
+</body>
+</html>
