@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            list-style: none;
+        }
+        .box {
+            width: 730px;
+            height: 454px;
+            padding: 8px;
+            border: 1px solid green;
+            margin: 100px auto;
+        }
+        .inner {
+            position: relative;
+            overflow: hidden;
+            height: 454px;
+        }
+        #imglist {
+            width: 700%;
+            position: absolute;
+            left: 0;
+        }
+        li {
+            float: left;
+        }
+        .list {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            margin-left: -85px;
+        }
+        .list i {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #fff;
+            color: #333;
+            float: left;
+            font-style: normal;
+            line-height: 20px;
+            font-size: 14px;
+            text-align: center;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .list i:last-child {
+            margin-right: 0;
+        }
+        .list i.current {
+            background-color: skyblue;
+            color: #fff;
+        }
+        .arrow {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            margin-top: -30px;
+        }
+        .arrow-left,.arrow-right{
+            width: 30px;
+            height: 60px;
+            position: absolute;
+            font: 20px/60px "consolas";
+            color: #fff;
+            background-color: rgba(0,0,0,.3);
+            text-align: center;
+            cursor: pointer;
+        }
+        .arrow-right {
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="inner" id="inner">
+        <ul id="imglist">
+            <li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/2.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/3.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/4.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/5.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/6.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+        </ul>
+        <div class="list">
+            <i class="current">1</i>
+            <i>2</i>
+            <i>3</i>
+            <i>4</i>
+            <i>5</i>
+            <i>6</i>
+        </div>
+        <div class="arrow">
+            <span class="arrow-left">&lt;</span>
+            <span class="arrow-right">&gt;</span>
+        </div>
+    </div>
+</div>
+<script src="common.js"></script>
+<script>
+    /**
+     *  1  鼠标移入圆点，切换图片
+     *  2  左右按钮切换
+     *  3  自动轮播
+     *  4  鼠标移入图片范围，停止自动轮播
+     */
+
+    //获取元素
+    var box = document.getElementById("box");
+    var inner = document.getElementById("inner");
+    var ul = inner.children[0];
+    var circles = inner.children[1].children;
+    var arrow = inner.children[2];
+    var leftBtn = arrow.children[0];
+    var rightBtn = arrow.children[1];
+    var imgWidth = ul.children[0].offsetWidth;
+
+    //1 鼠标移入圆点切换图片
+    //1.1 注册鼠标移入事件
+    for(var i = 0; i < circles.length ; i++){
+        //1.2 把索引存起来
+        circles[i].index = i;
+        circles[i].onmouseover = mouseOverHandle;
+    }
+    function mouseOverHandle(){
+        //同步索引
+        currentIndex = this.index;
+        //计算ul要到达的位置
+        var target = imgWidth * this.index * -1;
+        //重新设定
+        animate(ul,target);
+        //排他设置小圆点的样式
+        for(var j = 0; j < circles.length ; j++){
+            circles[j].removeAttribute("class");
+        }
+        this.className = "current";
+    }
+    //2 左右按钮切换图片
+    rightBtn.onclick = moveRight;
+    //2.1 自己记录一个当前的索引
+    var currentIndex = 0;
+    function moveRight(){
+        //判断是否最后一张，如果是，直接切换到第一张
+        if(currentIndex == ul.children.length - 1){
+            //直接切换到第一张
+            ul.style.left = 0;
+            //不要忘记同步索引
+            currentIndex = 0;
+        }
+//        索引和下一张图片要同步
+        currentIndex++;
+        //计算ul的位置
+        var target = imgWidth * currentIndex * -1;
+        //重新设定
+        animate(ul,target);
+        //把小圆点也同步
+        for(var j = 0; j < circles.length ; j++){
+            circles[j].removeAttribute("class");
+        }
+        //如果是最后一张，用户看起来是第一张，直接把第一个圆点修改
+        if(currentIndex == ul.children.length -1){
+            circles[0].className = "current";
+        }else{
+            circles[currentIndex].className = "current";
+        }
+    }
+
+//    2.2 左边
+    leftBtn.onclick = function(){
+        //如果已经是第一张，就该切换到倒数第二章，其实用户认为是倒数第一张，我们要做的就是让用户看起来从第一张切换到第六章
+        if(currentIndex == 0){
+            //同步索引
+            currentIndex = ul.children.length - 1;
+            //直接设置ul显示最后一张，此时看起来还是第一张
+            var temp = imgWidth * currentIndex * -1;
+            ul.style.left = temp + "px";
+        }
+        //让索引切换到前一张
+        currentIndex--;
+        //计算ul的位置
+        var target = imgWidth * currentIndex * -1;
+        //重新设定
+        animate(ul,target);
+        //同步小圆点
+        for(var j = 0; j < circles.length ; j++){
+            circles[j].removeAttribute("class");
+        }
+        circles[currentIndex].className = "current";
+    }
+    //3 自动轮播
+    var timer = setInterval(moveRight,1500);
+    //4 鼠标移动到图片范围内，停止自动切换，鼠标移开，有恢复自动切换
+    box.onmouseover = function(){
+        //停止自动轮播
+        clearInterval(timer)
+    }
+    box.onmouseout = function(){
+        //重新开始自动轮播
+        timer = setInterval(moveRight,1500);
+    }
+</script>
+</body>
+</html>

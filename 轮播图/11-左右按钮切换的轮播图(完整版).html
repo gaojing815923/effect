@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            list-style: none;
+        }
+        .box {
+            width: 730px;
+            height: 454px;
+            padding: 8px;
+            border: 1px solid green;
+            margin: 100px auto;
+        }
+        .inner {
+            position: relative;
+            overflow: hidden;
+            height: 454px;
+        }
+        #imglist {
+            width: 700%;
+            position: absolute;
+            left: 0;
+        }
+        li {
+            float: left;
+        }
+        .list {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            margin-left: -85px;
+        }
+        .list i {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #fff;
+            color: #333;
+            float: left;
+            font-style: normal;
+            line-height: 20px;
+            font-size: 14px;
+            text-align: center;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .list i:last-child {
+            margin-right: 0;
+        }
+        .list i.current {
+            background-color: skyblue;
+            color: #fff;
+        }
+        .arrow {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            margin-top: -30px;
+        }
+        .arrow-left,.arrow-right{
+            width: 30px;
+            height: 60px;
+            position: absolute;
+            font: 20px/60px "consolas";
+            color: #fff;
+            background-color: rgba(0,0,0,.3);
+            text-align: center;
+            cursor: pointer;
+        }
+        .arrow-right {
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="inner" id="inner">
+        <ul id="imglist">
+            <li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/2.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/3.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/4.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/5.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/6.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+        </ul>
+        <div class="list">
+            <i class="current">1</i>
+            <i>2</i>
+            <i>3</i>
+            <i>4</i>
+            <i>5</i>
+            <i>6</i>
+        </div>
+        <div class="arrow">
+            <span class="arrow-left">&lt;</span>
+            <span class="arrow-right">&gt;</span>
+        </div>
+    </div>
+</div>
+<script src="common.js"></script>
+<script>
+    /**
+     * 给左右按钮注册点击事件
+     *      在事件处理程序里，让ul移动
+     */
+
+//    1 获取元素
+    var inner = document.getElementById("inner");
+    var ul = inner.children[0];
+    var arrow = inner.children[2];
+    var leftBtn = arrow.children[0];
+    var rightBtn = arrow.children[1];
+
+    var currentIndex = 0;
+
+    var imgWidth = ul.children[0].offsetWidth;
+    //2 注册点击事件
+    rightBtn.onclick = function(){
+        if(currentIndex == ul.children.length - 1){
+            //当满足这个条件的时候，已经是实际上的最后一张，但是用户认为他是第一张，再次点击下一张的时候，应该切换到第二章
+            //切换到第二章的过程应该是从第一张慢慢切刀第二章
+            //直接把ul的位置设置到第一张，让ul慢慢的从第一张切换到第二章
+
+            //直接把ul的位置恢复原位
+            ul.style.left = 0;
+            //记得把索引同步到第一张
+            currentIndex = 0;
+        }
+
+        //图片切换到下一张，让索引跟对应的张数同步
+        currentIndex++;
+        //计算ul应该移动的距离，让ul移动即可
+        //ul移动的距离 = 图片的宽度 * 图片的索引 * -1
+        var target = imgWidth * currentIndex * -1;
+        //移动ul
+        animate(ul,target);
+    }
+    leftBtn.onclick = function(){
+//        当已经是第一张，在点击上一张，应该让用户看到第6张
+        if(currentIndex === 0){
+            //让ul直接显示最后一张，看起来还是第一张
+            var temp = imgWidth * 6 * -1;
+            ul.style.left = temp + "px";
+            //同步索引
+            currentIndex = 6;
+        }
+        currentIndex--;
+        var target = imgWidth * currentIndex * -1;
+        animate(ul,target);
+    }
+</script>
+</body>
+</html>

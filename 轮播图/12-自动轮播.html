@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            list-style: none;
+        }
+        .box {
+            width: 730px;
+            height: 454px;
+            padding: 8px;
+            border: 1px solid green;
+            margin: 100px auto;
+        }
+        .inner {
+            position: relative;
+            overflow: hidden;
+            height: 454px;
+        }
+        #imglist {
+            width: 700%;
+            position: absolute;
+            left: 0;
+        }
+        li {
+            float: left;
+        }
+        .list {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            margin-left: -85px;
+        }
+        .list i {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #fff;
+            color: #333;
+            float: left;
+            font-style: normal;
+            line-height: 20px;
+            font-size: 14px;
+            text-align: center;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .list i:last-child {
+            margin-right: 0;
+        }
+        .list i.current {
+            background-color: skyblue;
+            color: #fff;
+        }
+        .arrow {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            margin-top: -30px;
+        }
+        .arrow-left,.arrow-right{
+            width: 30px;
+            height: 60px;
+            position: absolute;
+            font: 20px/60px "consolas";
+            color: #fff;
+            background-color: rgba(0,0,0,.3);
+            text-align: center;
+            cursor: pointer;
+        }
+        .arrow-right {
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="inner" id="inner">
+        <ul id="imglist">
+            <li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/2.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/3.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/4.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/5.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/6.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+        </ul>
+        <div class="list">
+            <i class="current">1</i>
+            <i>2</i>
+            <i>3</i>
+            <i>4</i>
+            <i>5</i>
+            <i>6</i>
+        </div>
+        <div class="arrow">
+            <span class="arrow-left">&lt;</span>
+            <span class="arrow-right">&gt;</span>
+        </div>
+    </div>
+</div>
+<script src="common.js"></script>
+<script>
+    /**
+     * 自动轮播
+     *      每隔一定的时间让图片从上一张，切换到下一张
+     *          右边按钮的额逻辑是一样的
+     */
+
+//    1 获取元素
+    var inner = document.getElementById("inner");
+    var ul = inner.children[0];
+    var imgWidth = ul.children[0].offsetWidth;
+
+    var currentIndex = 0;
+    function moveRight(){
+        //如果已经到达最后一张，记得切换回第一张
+        if(currentIndex == ul.children.length - 1){
+            //直接设置ul回到最初的位置
+            ul.style.left = 0;
+            //记得同步索引
+            currentIndex=0;
+        }
+        //让索引自增
+        currentIndex++;
+        //根据索引计算出ul应该到达的目标位置
+        var target = imgWidth * currentIndex * -1;
+        //移动ul
+        animate(ul,target);
+    }
+
+    //2 每隔一段时间让ul移动
+    setInterval(moveRight,1500);
+</script>
+</body>
+</html>
